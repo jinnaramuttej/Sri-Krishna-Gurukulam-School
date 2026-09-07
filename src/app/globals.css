@@ -1,0 +1,202 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/*  Design tokens — Sri Balaji's Sri Krishna Gurukulam School          */
+/* ------------------------------------------------------------------ */
+@theme {
+  /* Brand palette (extracted from school poster) */
+  --color-cream: #f5efe0;
+  --color-cream-soft: #fdfaf1;
+  --color-cream-deep: #eadfc2;
+  --color-navy: #1a2a4a;
+  --color-navy-deep: #101c33;
+  --color-navy-soft: #253a63;
+  --color-gold: #8b6f3f;
+  --color-gold-light: #b28f52;
+  --color-gold-pale: #d9c9a3;
+  --color-brand: #2b7fd4;
+  --color-brand-deep: #1c61a8;
+  --color-saffron: #e8842c;
+  --color-ink: #232a3f;
+  --color-ink-soft: #515a76;
+
+  /* Typography */
+  --font-heading: var(--font-zilla), "Iowan Old Style", Georgia, serif;
+  --font-body: var(--font-inter), "Segoe UI", system-ui, sans-serif;
+
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgb(26 42 74 / 0.07), 0 14px 34px -14px rgb(26 42 74 / 0.22);
+  --shadow-lift: 0 2px 6px rgb(26 42 74 / 0.1), 0 28px 54px -18px rgb(26 42 74 / 0.32);
+  --shadow-glow: 0 0 0 1px rgb(217 201 163 / 0.25), 0 0 60px -10px rgb(232 132 44 / 0.35);
+
+  /* Animations */
+  --animate-spin-slower: spin-slower 56s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes spin-slower {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Base                                                                */
+/* ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream font-body text-ink antialiased;
+    /* Subtle hand-pressed paper dot texture */
+    background-image: radial-gradient(circle at 1px 1px, rgb(139 111 63 / 0.055) 1px, transparent 0);
+    background-size: 26px 26px;
+  }
+
+  :where(h1, h2, h3, h4) {
+    @apply font-heading text-navy;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: rgb(178 143 82 / 0.35);
+    color: #101c33;
+  }
+
+  :focus-visible {
+    outline: 3px solid rgb(43 127 212 / 0.55);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Shared components                                                   */
+/* ------------------------------------------------------------------ */
+/* Button base — registered as a utility so it can be @applied by variants */
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold tracking-wide transition-all duration-300;
+}
+
+@layer components {
+  /* Page width wrapper */
+  .wrap {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8 lg:px-10;
+  }
+
+  /* Buttons */
+  .btn-primary {
+    @apply btn bg-brand text-white shadow-[0_10px_25px_-8px_rgb(43_127_212/0.65)] hover:-translate-y-0.5 hover:bg-brand-deep hover:shadow-[0_16px_32px_-10px_rgb(43_127_212/0.7)];
+  }
+  .btn-gold {
+    @apply btn bg-gold text-cream-soft shadow-[0_10px_25px_-10px_rgb(139_111_63/0.8)] hover:-translate-y-0.5 hover:bg-gold-light;
+  }
+  .btn-outline-light {
+    @apply btn border border-cream/40 text-cream hover:border-gold-pale hover:bg-cream/5;
+  }
+  .btn-outline-navy {
+    @apply btn border border-navy/25 text-navy hover:border-gold hover:bg-navy/5;
+  }
+
+  /* Small caps gold section eyebrow */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[0.7rem] font-bold uppercase tracking-[0.28em] text-gold;
+  }
+
+  /* Ornamental divider — line, diamond, line */
+  .gold-rule {
+    @apply flex items-center justify-center gap-3 text-gold;
+  }
+  .gold-rule::before,
+  .gold-rule::after {
+    content: "";
+    @apply h-px w-14 bg-gradient-to-r from-transparent via-gold/70 to-gold/70 sm:w-24;
+  }
+  .gold-rule::after {
+    @apply bg-gradient-to-l;
+  }
+
+  /* Cream card with gold keyline */
+  .card {
+    @apply rounded-2xl border border-gold/20 bg-cream-soft shadow-card transition-all duration-300;
+  }
+  .card-hover {
+    @apply hover:-translate-y-1.5 hover:border-gold/45 hover:shadow-lift;
+  }
+
+  /* Pinned placeholder tag for missing client content */
+  .placeholder-tag {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-dashed border-gold/70 bg-gold/10 px-3 py-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-gold;
+  }
+
+  /* Form fields */
+  .field-label {
+    @apply mb-1.5 block text-[0.72rem] font-bold uppercase tracking-[0.14em] text-navy;
+  }
+  .field-input {
+    @apply w-full rounded-xl border border-navy/20 bg-white/80 px-4 py-3 text-sm text-ink shadow-inner transition placeholder:text-ink-soft/50 focus:border-brand focus:ring-2 focus:ring-brand/30 focus:outline-none;
+  }
+
+  /* Peacock-eye inspired ambient glow for dark sections */
+  .peacock-glow {
+    background:
+      radial-gradient(60% 48% at 50% 0%, rgb(43 127 212 / 0.22), transparent 70%),
+      radial-gradient(42% 34% at 50% 6%, rgb(47 154 138 / 0.16), transparent 72%),
+      radial-gradient(26% 22% at 50% 10%, rgb(232 132 44 / 0.14), transparent 75%);
+  }
+
+  /* Faint gold ring pattern for dark bands */
+  .ring-pattern {
+    background-image:
+      radial-gradient(circle at center, transparent 58%, rgb(217 201 163 / 0.07) 59%, transparent 61%),
+      radial-gradient(circle at center, transparent 74%, rgb(217 201 163 / 0.05) 75%, transparent 77%);
+    background-size: 130px 130px;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/*  Scroll reveal                                                       */
+/* ------------------------------------------------------------------ */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
