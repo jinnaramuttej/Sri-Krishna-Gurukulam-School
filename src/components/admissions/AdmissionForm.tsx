@@ -207,11 +207,12 @@ export function AdmissionForm() {
       <div className="mt-7 flex flex-col items-center gap-6">
         <Turnstile
           ref={turnstileRef}
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "1x00000000000000000000AA"}
           onSuccess={(token) => {
             setTurnstileToken(token);
             setError(null);
           }}
+          onError={() => setError("Turnstile failed to load. Check console or domain restrictions.")}
           options={{ theme: "light" }}
         />
 
