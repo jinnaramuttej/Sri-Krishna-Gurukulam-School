@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
-import { CheckCircle2, Send } from "lucide-react";
-import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
-import { site, whatsappHref } from "@/lib/site";
+import { useState, useRef, type FormEvent } from "react";
+import { CheckCircle2, Send, AlertCircle, Loader2 } from "lucide-react";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
+import { submitAdmissionEnquiry } from "@/app/actions/admissions";
+import { site } from "@/lib/site";
 
 const classOptions = [
   "Nursery",
@@ -35,6 +36,10 @@ export function AdmissionForm() {
     message: "",
   });
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const update = (key: keyof typeof form) => (e: { target: { value: string } }) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -50,9 +55,28 @@ export function AdmissionForm() {
     .filter(Boolean)
     .join("\n");
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (!turnstileToken) {
+      setError("Please complete the anti-spam check.");
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setError(null);
+    
+    const formData = new FormData(e.currentTarget);
+    const result = await submitAdmissionEnquiry(formData, turnstileToken);
+    
+    setIsSubmitting(false);
+    
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setError(result.error || "An unexpected error occurred.");
+      turnstileRef.current?.reset();
+      setTurnstileToken("");
+    }
   };
 
   if (submitted) {
@@ -61,28 +85,23 @@ export function AdmissionForm() {
         <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-brand/10">
           <CheckCircle2 className="h-7 w-7 text-brand" aria-hidden="true" />
         </span>
-        <h3 className="mt-5 font-heading text-2xl font-bold text-navy">Enquiry Noted — One Last Step</h3>
+        <h3 className="mt-5 font-heading text-2xl font-bold text-navy">Enquiry Submitted Successfully</h3>
         <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-ink-soft">
-          Our online form backend is being set up. To make sure the school receives your enquiry today, please
-          send it instantly on WhatsApp — your details are already filled in.
+          Thank you for your interest in {site.shortName}. Our admission team has received your details and will contact you shortly to guide you through the next steps.
         </p>
-        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a
-            href={whatsappHref(waMessage)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn w-full border border-[#4fce5d]/50 bg-[#1fae53] text-white hover:-translate-y-0.5 hover:bg-[#23c05c] sm:w-auto"
+        <div className="mt-6 flex justify-center">
+          <button 
+            type="button" 
+            onClick={() => { 
+              setSubmitted(false); 
+              setForm({ studentName: "", parentName: "", phone: "", classApplying: "", message: "" }); 
+              setTurnstileToken(""); 
+            }} 
+            className="btn-outline-navy"
           >
-            <WhatsAppIcon className="h-4 w-4" />
-            Send Enquiry on WhatsApp
-          </a>
-          <button type="button" onClick={() => setSubmitted(false)} className="btn-outline-navy w-full sm:w-auto">
-            Edit Details
+            Submit Another Enquiry
           </button>
         </div>
-        <p className="mt-5 text-[0.65rem] uppercase tracking-[0.18em] text-ink-soft/70">
-          [Placeholder WhatsApp number — awaiting confirmation]
-        </p>
       </div>
     );
   }
@@ -178,15 +197,41 @@ export function AdmissionForm() {
         </div>
       </div>
 
-      <div className="mt-7 flex flex-col items-center gap-4">
-        <button type="submit" className="btn-primary group w-full sm:w-auto sm:px-10">
-          Submit Enquiry
-          <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" aria-hidden="true" />
+      {error && (
+        <div className="mt-6 rounded-lg bg-red-50 p-4 text-sm text-red-600 flex items-start gap-3">
+          <AlertCircle className="h-5 w-5 shrink-0" />
+          <p>{error}</p>
+        </div>
+      )}
+
+      <div className="mt-7 flex flex-col items-center gap-6">
+        <Turnstile
+          ref={turnstileRef}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ""}
+          onSuccess={(token) => {
+            setTurnstileToken(token);
+            setError(null);
+          }}
+          options={{ theme: "light" }}
+        />
+
+        <button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="btn-primary group w-full sm:w-auto sm:px-10 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+        >
+          {isSubmitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Submitting...
+            </>
+          ) : (
+            <>
+              Submit Enquiry
+              <Send className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" aria-hidden="true" />
+            </>
+          )}
         </button>
-        <p className="max-w-md text-center text-xs leading-relaxed text-ink-soft">
-          Online submission is being set up — after submitting, you can forward this enquiry to the school on
-          WhatsApp in one tap.
-        </p>
       </div>
     </form>
   );
