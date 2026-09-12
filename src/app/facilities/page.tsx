@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BedDouble, Bus } from "lucide-react";
 import { createClient } from "@/utils/supabase/server";
