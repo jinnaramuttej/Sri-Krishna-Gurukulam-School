@@ -36,7 +36,7 @@ export async function submitAdmissionEnquiry(formData: FormData, turnstileToken:
     const classApplying = formData.get("classApplying") as string;
     const message = formData.get("message") as string;
 
-    const supabase = createClient();
+    const supabase = await createClient();
 
     const { error } = await supabase.from("admissions").insert({
       student_name: studentName,
