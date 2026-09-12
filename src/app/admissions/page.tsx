@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BadgeCheck, ClipboardList, MessagesSquare, School, Sparkles, TentTree } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 import { PageHero } from "@/components/layout/PageHero";
 import { AdmissionForm } from "@/components/admissions/AdmissionForm";
 import { Placeholder } from "@/components/ui/Placeholder";
@@ -42,7 +43,9 @@ const steps = [
   },
 ];
 
-export default function AdmissionsPage() {
+export default async function AdmissionsPage() {
+  const supabase = await createClient();
+  const { data: fees } = await supabase.from("fees").select("*").order("class_name", { ascending: true });
   return (
     <>
       <PageHero
@@ -141,13 +144,44 @@ export default function AdmissionsPage() {
             ))}
           </ol>
 
-          <Reveal delay={120} className="mx-auto mt-8 max-w-3xl">
-            <Placeholder
-              kind="copy"
-              label="PLACEHOLDER — documents & fee details awaited"
-              note="The checklist of documents required for admission and the fee structure will be published here once received from the school."
-              className="min-h-28"
-            />
+          <Reveal delay={120} className="mx-auto mt-12 max-w-4xl">
+            {fees && fees.length > 0 ? (
+              <div className="card overflow-hidden border-brand/20">
+                <div className="bg-cream-deep p-6 border-b border-brand/10">
+                  <h3 className="font-heading text-xl font-bold text-navy">Fee Structure {site.academicYear}</h3>
+                  <p className="mt-2 text-sm text-ink-soft">
+                    The tuition fee structure as applicable for the current academic session. For any queries regarding sibling discounts or transport fees, please contact the office.
+                  </p>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm whitespace-nowrap">
+                    <thead className="bg-brand/5 text-navy font-bold">
+                      <tr>
+                        <th className="p-4 sm:px-6 border-b border-brand/10 w-1/3">Class</th>
+                        <th className="p-4 sm:px-6 border-b border-brand/10 w-1/3">Tuition Fee</th>
+                        <th className="p-4 sm:px-6 border-b border-brand/10 w-1/3">Notes</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-brand/10 bg-white">
+                      {fees.map((fee) => (
+                        <tr key={fee.id} className="hover:bg-cream-soft/50 transition">
+                          <td className="p-4 sm:px-6 font-semibold text-navy">{fee.class_name}</td>
+                          <td className="p-4 sm:px-6 text-brand font-medium">{fee.amount}</td>
+                          <td className="p-4 sm:px-6 text-ink-soft truncate max-w-[200px]" title={fee.notes || ""}>{fee.notes || "—"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              <Placeholder
+                kind="copy"
+                label="FEE STRUCTURE — awaiting updates"
+                note="The detailed fee structure will be published here shortly."
+                className="min-h-28"
+              />
+            )}
           </Reveal>
         </div>
       </section>

@@ -1,6 +1,6 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, BedDouble, Bus } from "lucide-react";
+import { createClient } from "@/utils/supabase/server";
 import { PageHero } from "@/components/layout/PageHero";
 import { Placeholder, PlaceholderTag } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
@@ -12,7 +12,9 @@ export const metadata: Metadata = {
   description: `Facilities at ${site.name} — school vehicle facility and hostel facility, in a disciplined gurukulam atmosphere.`,
 };
 
-export default function FacilitiesPage() {
+export default async function FacilitiesPage() {
+  const supabase = await createClient();
+  const { data: routes } = await supabase.from("transport_routes").select("*").order("route_name", { ascending: true });
   return (
     <>
       <PageHero
@@ -53,8 +55,31 @@ export default function FacilitiesPage() {
               Detailed route coverage, pick-up points, timings and the transport fee structure are being finalised
               and will be published here shortly.
             </p>
-            <div className="mt-5">
-              <PlaceholderTag>Placeholder — routes & timings awaited</PlaceholderTag>
+            <div className="mt-7">
+              {routes && routes.length > 0 ? (
+                <div className="card overflow-hidden border-brand/20">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-sm whitespace-nowrap">
+                      <thead className="bg-brand/5 text-navy font-bold">
+                        <tr>
+                          <th className="p-3 border-b border-brand/10">Route Name</th>
+                          <th className="p-3 border-b border-brand/10">Area Covered</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-brand/10 bg-white">
+                        {routes.map((route) => (
+                          <tr key={route.id} className="hover:bg-cream-soft/50 transition">
+                            <td className="p-3 font-semibold text-navy">{route.route_name}</td>
+                            <td className="p-3 text-ink-soft">{route.area_covered}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              ) : (
+                <PlaceholderTag>Placeholder — routes & timings awaited</PlaceholderTag>
+              )}
             </div>
             <div className="mt-7">
               <Link
