@@ -1,7 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function submitAdmissionEnquiry(formData: FormData, turnstileToken: string) {
   try {
@@ -50,48 +52,16 @@ export async function submitAdmissionEnquiry(formData: FormData, turnstileToken:
       return { success: false, error: "Failed to save data. Please try again." };
     }
 
-    // 3. Send Emails via Nodemailer
+    // 3. Send Notification Email via Resend
     try {
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
-
-      // Email to Parent
-      const parentMailOptions = {
-        from: `"Sri Krishna Gurukulam" <${process.env.GMAIL_USER}>`,
-        to: email,
-        subject: "Admission Enquiry Received - Sri Krishna Gurukulam",
-        text: `Dear ${parentName},\n\nThank you for your interest in Sri Krishna Gurukulam.\nWe have received your admission enquiry for ${studentName} (Class: ${classApplying}). Our admissions team will review your details and contact you shortly at ${phone}.\n\nWarm Regards,\nAdmissions Team\nSri Krishna Gurukulam`,
-        html: `
-          <div style="font-family: sans-serif; line-height: 1.6; color: #333;">
-            <h2>Thank You for Your Interest</h2>
-            <p>Dear ${parentName},</p>
-            <p>We have received your admission enquiry for <strong>${studentName}</strong> (Class: ${classApplying}).</p>
-            <p>Our admissions team will review your details and contact you shortly at <strong>${phone}</strong>.</p>
-            ${message ? `<p><strong>Your Message:</strong> ${message}</p>` : ""}
-            <p>Warm Regards,<br/><strong>Admissions Team</strong><br/>Sri Krishna Gurukulam</p>
-          </div>
-        `,
-      };
-
-      // Notification Email to School Admin
-      const adminMailOptions = {
-        from: `"Website Enquiries" <${process.env.GMAIL_USER}>`,
-        to: process.env.GMAIL_USER,
+      await resend.emails.send({
+        from: "Website Enquiries <onboarding@resend.dev>",
+        to: ["admissions.skgs@gmail.com"], // Must match your verified Resend account email for testing
         subject: `New Admission Enquiry: ${studentName}`,
         text: `New Enquiry Received:\n\nStudent: ${studentName}\nParent: ${parentName}\nPhone: ${phone}\nEmail: ${email}\nClass: ${classApplying}\nMessage: ${message || "N/A"}`,
-      };
-
-      await Promise.all([
-        transporter.sendMail(parentMailOptions),
-        transporter.sendMail(adminMailOptions),
-      ]);
+      });
     } catch (emailError) {
-      console.error("Failed to send emails:", emailError);
+      console.error("Failed to send email:", emailError);
       // We don't fail the whole submission if email fails, just log it.
     }
 
