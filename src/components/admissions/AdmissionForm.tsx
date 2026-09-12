@@ -32,6 +32,7 @@ export function AdmissionForm() {
     studentName: "",
     parentName: "",
     phone: "",
+    email: "",
     classApplying: "",
     message: "",
   });
@@ -94,7 +95,7 @@ export function AdmissionForm() {
             type="button" 
             onClick={() => { 
               setSubmitted(false); 
-              setForm({ studentName: "", parentName: "", phone: "", classApplying: "", message: "" }); 
+              setForm({ studentName: "", parentName: "", phone: "", email: "", classApplying: "", message: "" }); 
               setTurnstileToken(""); 
             }} 
             className="btn-outline-navy"
@@ -156,6 +157,21 @@ export function AdmissionForm() {
             placeholder="10-digit mobile number"
             value={form.phone}
             onChange={update("phone")}
+            className="field-input"
+          />
+        </div>
+        <div>
+          <label htmlFor="email" className="field-label">
+            Email Address <span className="text-brand" aria-hidden="true">*</span>
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            placeholder="e.g. name@example.com"
+            value={form.email}
+            onChange={update("email")}
             className="field-input"
           />
         </div>
