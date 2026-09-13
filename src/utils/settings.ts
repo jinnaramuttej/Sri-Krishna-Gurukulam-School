@@ -6,10 +6,11 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
   noStore();
   try {
     const supabase = await createClient();
-    const { data } = await supabase.from("school_settings").select("*").limit(1).single();
-    if (data) return data as SchoolSettings;
+    const { data, error } = await supabase.from("school_settings").select("*").limit(1);
+    if (error) console.error("getSchoolSettings error:", error);
+    if (data && data.length > 0) return data[0] as SchoolSettings;
   } catch (error) {
-    // Return empty if table doesn't exist yet or query fails
+    console.error("getSchoolSettings exception:", error);
   }
   return { 
     school_name: null, 
