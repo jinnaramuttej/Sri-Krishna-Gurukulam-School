@@ -52,7 +52,6 @@ export default async function ContactPage() {
                     <p className="mt-3 font-heading text-2xl font-bold tracking-wide text-navy">
                       {settings.phone || site.whatsapp.display}
                     </p>
-                    {!settings.phone && <PlaceholderTag>Placeholder number — awaiting confirmation</PlaceholderTag>}
                     <div className="mt-4">
                       <a
                         href={getWhatsAppHref(settings.phone, "Namaste! I have a question about the school.")}
@@ -92,11 +91,6 @@ export default async function ContactPage() {
                         ))
                       )}
                     </address>
-                    {!settings.address && (
-                      <div className="mt-3">
-                        <PlaceholderTag>Placeholder — awaiting full address</PlaceholderTag>
-                      </div>
-                    )}
                   </div>
                 </div>
               </article>
@@ -161,9 +155,6 @@ export default async function ContactPage() {
                   </span>
                   <h3 className="mt-5 text-[0.68rem] font-bold uppercase tracking-[0.28em] text-gold">{role}</h3>
                   <p className="mt-2 font-heading text-xl font-bold text-navy">{name}</p>
-                  <div className="mt-3">
-                    <PlaceholderTag>{`Placeholder — ${role}'s name awaited`}</PlaceholderTag>
-                  </div>
                   <p className="mt-4 text-sm leading-relaxed text-ink-soft">
                     A short message from the {role.toLowerCase()} will appear here once approved by the school.
                   </p>

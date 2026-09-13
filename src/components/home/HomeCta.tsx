@@ -49,14 +49,6 @@ export async function HomeCta() {
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </Link>
         </Reveal>
-
-        <Reveal delay={240}>
-          {!settings.phone && (
-            <p className="mt-6 text-[0.65rem] uppercase tracking-[0.2em] text-cream/40">
-              [Placeholder WhatsApp number — awaiting confirmation from school]
-            </p>
-          )}
-        </Reveal>
       </div>
     </section>
   );

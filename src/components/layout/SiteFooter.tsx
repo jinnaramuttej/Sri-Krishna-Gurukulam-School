@@ -95,7 +95,6 @@ export function SiteFooter({ settings }: { settings: SchoolSettings }) {
                           {line}
                         </span>
                       ))}
-                      <span className="placeholder-tag mt-2">[Placeholder — awaiting address]</span>
                     </>
                   )}
                 </div>
@@ -109,11 +108,6 @@ export function SiteFooter({ settings }: { settings: SchoolSettings }) {
                 <WhatsAppIcon className="h-4 w-4 text-[#4fce5d]" />
                 {settings.phone || site.whatsapp.display}
               </a>
-              {!settings.phone && (
-                <span className="mt-2 block text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">
-                  [Placeholder number — awaiting confirmation]
-                </span>
-              )}
             </address>
           </div>
         </div>
