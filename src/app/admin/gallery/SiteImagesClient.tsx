@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { updateSiteImage } from "./actions"
 import { Loader2, UploadCloud, Trash2, ImageIcon } from "lucide-react"
 import { createClient } from "@/utils/supabase/client"
@@ -18,6 +19,7 @@ const SITE_IMAGES = [
 export function SiteImagesClient({ settings }: { settings: SchoolSettings | null }) {
   const [loadingField, setLoadingField] = useState<string | null>(null)
   const supabase = createClient()
+  const router = useRouter()
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const file = e.target.files?.[0]
@@ -46,6 +48,7 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
         .getPublicUrl(fileName)
         
       await updateSiteImage(field, publicUrl)
+      router.refresh()
       
     } catch (err) {
       console.error("Upload error:", err)
@@ -61,6 +64,7 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
     setLoadingField(field)
     try {
       await updateSiteImage(field, null)
+      router.refresh()
     } catch (err) {
       console.error("Delete error:", err)
       alert("Failed to remove image.")
@@ -114,11 +118,11 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
                   accept="image/*"
                   onChange={(e) => handleUpload(e, field)}
                   disabled={loadingField === field}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed"
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
                 />
                 <button 
                   disabled={loadingField === field}
-                  className="btn-outline-light w-full flex items-center justify-center gap-2 h-[38px] bg-cream"
+                  className="w-full flex items-center justify-center gap-2 h-[38px] bg-brand/10 text-brand font-semibold rounded hover:bg-brand/20 transition disabled:opacity-50"
                 >
                   {loadingField === field ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
