@@ -29,6 +29,13 @@ export default async function AboutPage() {
     { icon: Lightbulb, label: "Learning Atmosphere", value: "Complete English Atmosphere" },
   ];
 
+  const values = [
+    { icon: ShieldCheck, title: "Discipline First", text: "A structured daily routine that builds focus, respect, and good habits early on." },
+    { icon: BookOpen, title: "Academic Rigour", text: "Strong foundation for competitive exams (IIT/NEET) alongside regular curriculum." },
+    { icon: HandHeart, title: "Individual Care", text: "Small batches ensuring every child receives the personal attention they need." },
+    { icon: HeartHandshake, title: "Traditional Roots", text: "Deep respect for Indian culture and values woven into modern education." },
+  ];
+
   return (
     <>
       <PageHero

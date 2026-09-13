@@ -50,11 +50,11 @@ export async function updateSiteImage(field: string, image_url: string | null) {
     await supabase.from("school_settings").update({ 
       [field]: image_url,
       updated_at: new Date().toISOString()
-    }).eq("id", data[0].id)
+    } as any).eq("id", data[0].id)
   } else {
     await supabase.from("school_settings").insert({ 
       [field]: image_url 
-    })
+    } as any)
   }
   
   revalidatePath("/", "layout")
