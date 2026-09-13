@@ -48,7 +48,10 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
         .from('gallery-photos')
         .getPublicUrl(fileName)
         
-      await updateSiteImage(field, publicUrl)
+      const result = await updateSiteImage(field, publicUrl)
+      if (result && result.error) {
+        throw new Error(result.error)
+      }
       router.refresh()
       
     } catch (err: any) {
@@ -64,7 +67,10 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
     
     setLoadingField(field)
     try {
-      await updateSiteImage(field, null)
+      const result = await updateSiteImage(field, null)
+      if (result && result.error) {
+        throw new Error(result.error)
+      }
       router.refresh()
     } catch (err: any) {
       console.error("Delete error:", err)
