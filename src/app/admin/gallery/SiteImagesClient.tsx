@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { updateSiteImage } from "./actions"
 import { Loader2, UploadCloud, Trash2, ImageIcon } from "lucide-react"
@@ -17,14 +17,21 @@ const SITE_IMAGES = [
 ] as const
 
 export function SiteImagesClient({ settings }: { settings: SchoolSettings | null }) {
+  const [localSettings, setLocalSettings] = useState(settings)
   const [loadingField, setLoadingField] = useState<string | null>(null)
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
   const supabase = createClient()
   const router = useRouter()
 
+  useEffect(() => {
+    setLocalSettings(settings)
+  }, [settings])
+
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
     const file = e.target.files?.[0]
     if (!file) return
+    
+    const oldUrl = localSettings?.[field as keyof SchoolSettings] as string | null
     
     setLoadingField(field)
     try {
@@ -52,7 +59,23 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
       if (result && result.error) {
         throw new Error(result.error)
       }
+      
+      if (oldUrl) {
+        try {
+          const oldFileName = oldUrl.split('/').pop()
+          if (oldFileName) {
+            await supabase.storage.from('gallery-photos').remove([oldFileName])
+          }
+        } catch (delErr) {
+          console.error("Failed to delete old image", delErr)
+        }
+      }
+      
+      setLocalSettings(prev => prev ? { ...prev, [field]: publicUrl } as any : { [field]: publicUrl } as any)
       router.refresh()
+      
+      // Reset input value so same file can be chosen again
+      e.target.value = ""
       
     } catch (err: any) {
       console.error("Upload error:", err)
@@ -65,12 +88,27 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
   const handleDelete = async (field: string) => {
     if (!confirm("Are you sure you want to remove this image? The placeholder will be shown again.")) return
     
+    const oldUrl = localSettings?.[field as keyof SchoolSettings] as string | null
+    
     setLoadingField(field)
     try {
       const result = await updateSiteImage(field, null)
       if (result && result.error) {
         throw new Error(result.error)
       }
+      
+      if (oldUrl) {
+        try {
+          const oldFileName = oldUrl.split('/').pop()
+          if (oldFileName) {
+            await supabase.storage.from('gallery-photos').remove([oldFileName])
+          }
+        } catch (delErr) {
+          console.error("Failed to delete old image", delErr)
+        }
+      }
+      
+      setLocalSettings(prev => prev ? { ...prev, [field]: null } as any : null)
       router.refresh()
     } catch (err: any) {
       console.error("Delete error:", err)
@@ -91,7 +129,7 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {SITE_IMAGES.map(({ field, label, desc }) => {
-          const currentUrl = settings?.[field as keyof SchoolSettings] as string | null
+          const currentUrl = localSettings?.[field as keyof SchoolSettings] as string | null
           
           return (
             <div key={field} className="card bg-white p-4 flex flex-col items-center text-center border-brand/10">
