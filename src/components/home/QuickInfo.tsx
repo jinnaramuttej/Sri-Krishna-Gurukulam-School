@@ -2,29 +2,33 @@ import { BookOpen, CalendarCheck2, GraduationCap } from "lucide-react";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/lib/site";
 
-const facts = [
-  {
-    icon: BookOpen,
-    value: "Nursery – X",
-    label: "Classes Offered",
-    note: "Foundational to secondary schooling",
-  },
-  {
-    icon: GraduationCap,
-    value: "SSC",
-    label: "Board of Education",
-    note: "State SSC curriculum",
-  },
-  {
-    icon: CalendarCheck2,
-    value: site.established,
-    label: "Established",
-    note: "A new gurukulam for a new generation",
-  },
-];
+import { getSchoolSettings } from "@/utils/settings";
 
 /** Quick info bar — key facts in cards overlapping the hero wave. */
-export function QuickInfo() {
+export async function QuickInfo() {
+  const settings = await getSchoolSettings();
+
+  const facts = [
+    {
+      icon: BookOpen,
+      value: settings.classes || site.classes,
+      label: "Classes Offered",
+      note: "Foundational to secondary schooling",
+    },
+    {
+      icon: GraduationCap,
+      value: settings.board || site.board,
+      label: "Board of Education",
+      note: "State SSC curriculum",
+    },
+    {
+      icon: CalendarCheck2,
+      value: settings.established_year || site.established,
+      label: "Established",
+      note: "A new gurukulam for a new generation",
+    },
+  ];
+
   return (
     <section aria-label="School at a glance" className="wrap relative z-10 -mt-4 sm:-mt-8">
       <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">

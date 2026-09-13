@@ -18,7 +18,10 @@ export function SiteFooter({ settings }: { settings: SchoolSettings }) {
               <Crest size={64} className="drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)]" />
               <div>
                 <p className="font-heading text-lg font-bold leading-tight text-cream">
-                  Sri Krishna Gurukulam School
+                  {settings.school_name || site.name}
+                </p>
+                <p className="mt-1 text-sm text-cream/70">
+                  {settings.board || site.board} · Estd {settings.established_year || site.established}
                 </p>
               </div>
             </div>

@@ -21,7 +21,7 @@ export default async function AdminLayout({
               <Link href="/admin/fees" className="text-white/80 hover:text-gold transition">Fees</Link>
               <Link href="/admin/transport" className="text-white/80 hover:text-gold transition">Transport</Link>
               <Link href="/admin/gallery" className="text-white/80 hover:text-gold transition">Gallery</Link>
-              <Link href="/admin/contact-settings" className="text-white/80 hover:text-gold transition">Contact Details</Link>
+              <Link href="/admin/settings" className="text-white/80 hover:text-gold transition">Site Settings</Link>
             </nav>
           </div>
           <form action={async () => {

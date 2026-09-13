@@ -7,11 +7,16 @@ import { Placeholder } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "Admissions",
-  description: `Admissions open for ${site.academicYear} at ${site.name} — classes ${site.classes}, ${site.board}. Send an enquiry today.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Admissions",
+    description: `Admissions open for ${settings.academic_year || site.academicYear} at ${name} — classes ${settings.classes || site.classes}, ${settings.board || site.board}. Send an enquiry today.`,
+  };
+}
 
 const classGroups = [
   { stage: "Pre-Primary", classes: ["Nursery", "LKG", "UKG"] },
@@ -46,16 +51,18 @@ const steps = [
 export default async function AdmissionsPage() {
   const supabase = await createClient();
   const { data: fees } = await supabase.from("fees").select("*").order("class_name", { ascending: true });
+  const settings = await getSchoolSettings();
+
   return (
     <>
       <PageHero
-        eyebrow={`Admissions Open · ${site.academicYear}`}
+        eyebrow={`Admissions Open · ${settings.academic_year || site.academicYear}`}
         title={
           <>
             Begin Your Child's <span className="italic text-gold-pale">Gurukulam Journey</span>
           </>
         }
-        lead={`Admissions are now open for ${site.academicYear}, from Nursery to Class X under the ${site.board}. Seats are limited in every class.`}
+        lead={`Admissions are now open for ${settings.academic_year || site.academicYear}, from ${settings.classes || site.classes} under the ${settings.board || site.board}. Seats are limited in every class.`}
         breadcrumb={[{ label: "Home", href: "/" }, { label: "Admissions" }]}
       />
 
@@ -69,10 +76,10 @@ export default async function AdmissionsPage() {
               </span>
               <div>
                 <p className="font-heading text-xl font-bold text-navy sm:text-2xl">
-                  Admissions Open <span className="text-brand">{site.academicYear}</span>
+                  Admissions Open <span className="text-brand">{settings.academic_year || site.academicYear}</span>
                 </p>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-ink-soft">
-                  Nursery – Class X · {site.board} · Limited Seats
+                  {settings.classes || site.classes} · {settings.board || site.board} · Limited Seats
                 </p>
               </div>
             </div>
@@ -89,7 +96,7 @@ export default async function AdmissionsPage() {
           <SectionHeading
             eyebrow="Classes Offered"
             title="From First Steps to Class X"
-            lead={`${site.shortName} School offers continuous schooling across four stages under the ${site.board}.`}
+            lead={`${settings.short_name || site.shortName} School offers continuous schooling across four stages under the ${settings.board || site.board}.`}
           />
           <div className="mx-auto mt-12 grid max-w-5xl gap-5 sm:grid-cols-2">
             {classGroups.map(({ stage, classes }, i) => (
@@ -148,7 +155,7 @@ export default async function AdmissionsPage() {
             {fees && fees.length > 0 ? (
               <div className="card overflow-hidden border-brand/20">
                 <div className="bg-cream-deep p-6 border-b border-brand/10">
-                  <h3 className="font-heading text-xl font-bold text-navy">Fee Structure {site.academicYear}</h3>
+                  <h3 className="font-heading text-xl font-bold text-navy">Fee Structure {settings.academic_year || site.academicYear}</h3>
                   <p className="mt-2 text-sm text-ink-soft">
                     The tuition fee structure as applicable for the current academic session. For any queries regarding sibling discounts or transport fees, please contact the office.
                   </p>

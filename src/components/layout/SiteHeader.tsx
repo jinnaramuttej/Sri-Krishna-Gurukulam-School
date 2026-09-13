@@ -85,10 +85,10 @@ export function SiteHeader({ settings }: { settings: SchoolSettings }) {
             />
             <span className="min-w-0 leading-tight">
               <span className="block truncate font-heading text-[0.95rem] font-bold text-navy sm:text-lg">
-                Sri Krishna Gurukulam <span className="text-gold">School</span>
+                {settings.short_name || site.shortName} <span className="text-gold">School</span>
               </span>
               <span className="hidden text-[0.6rem] font-semibold uppercase tracking-[0.22em] text-ink-soft sm:block">
-                Estd {site.established} · {site.board}
+                Estd {settings.established_year || site.established} · {settings.board || site.board}
               </span>
             </span>
           </Link>
@@ -202,9 +202,13 @@ export function SiteHeader({ settings }: { settings: SchoolSettings }) {
                 open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
               }`}
             >
-              <Link href="/admissions" tabIndex={open ? 0 : -1} className="btn-primary w-full">
-                <Sparkles className="h-4 w-4" aria-hidden="true" />
-                Admissions Open {site.academicYear}
+              <Link
+                href="/admissions"
+                tabIndex={open ? 0 : -1}
+                className="btn-primary w-full shadow-[0_8px_16px_-6px_rgb(232_132_44/0.4)]"
+                onClick={() => setOpen(false)}
+              >
+                Admissions Open {settings.academic_year || site.academicYear}
               </Link>
               <a
                 href={getWhatsAppHref(settings.phone, "Namaste! I would like to know more about admissions.")}

@@ -6,45 +6,29 @@ import { Placeholder, PlaceholderTag } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "About",
-  description: `About ${site.name} — an ${site.board} school for classes ${site.classes}, established ${site.established}, blending gurukulam values with modern academic standards.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "About",
+    description: `About ${name} — an ${settings.board || site.board} school for classes ${settings.classes || site.classes}, established ${settings.established_year || site.established}, blending gurukulam values with modern academic standards.`,
+  };
+}
 
-const glance = [
-  { icon: Landmark, label: "School Name", value: site.name },
-  { icon: GraduationCap, label: "Board", value: site.board },
-  { icon: BookOpen, label: "Classes", value: site.classes },
-  { icon: CalendarCheck2, label: "Established", value: site.established },
-  { icon: MapPin, label: "Location", value: null }, // placeholder
-  { icon: Lightbulb, label: "Learning Atmosphere", value: "Complete English Atmosphere" },
-];
+export default async function AboutPage() {
+  const settings = await getSchoolSettings();
 
-const values = [
-  {
-    icon: HeartHandshake,
-    title: "Respect",
-    text: "Reverence for gurus, parents, peers and self — the first lesson of the gurukulam.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Discipline",
-    text: "A calm, orderly daily rhythm that lets every child focus, flourish and feel safe.",
-  },
-  {
-    icon: Lightbulb,
-    title: "Curiosity",
-    text: "Questions are honoured here — understanding always comes before memorising.",
-  },
-  {
-    icon: HandHeart,
-    title: "Service",
-    text: "Children learn that knowledge finds its purpose in serving family and society.",
-  },
-];
+  const glance = [
+    { icon: Landmark, label: "School Name", value: settings.school_name || site.name },
+    { icon: GraduationCap, label: "Board", value: settings.board || site.board },
+    { icon: BookOpen, label: "Classes", value: settings.classes || site.classes },
+    { icon: CalendarCheck2, label: "Established", value: settings.established_year || site.established },
+    { icon: MapPin, label: "Location", value: settings.address ? settings.address.split('\n')[0] : null },
+    { icon: Lightbulb, label: "Learning Atmosphere", value: "Complete English Atmosphere" },
+  ];
 
-export default function AboutPage() {
   return (
     <>
       <PageHero
@@ -54,7 +38,7 @@ export default function AboutPage() {
             A <span className="italic text-gold-pale">Gurukulam</span> for the Modern Generation
           </>
         }
-        lead={`${site.name} brings together the discipline and values of a traditional gurukulam with the academic rigour of a modern ${site.board} school.`}
+        lead={`${settings.school_name || site.name} brings together the discipline and values of a traditional gurukulam with the academic rigour of a modern ${settings.board || site.board} school.`}
         breadcrumb={[{ label: "Home", href: "/" }, { label: "About" }]}
       />
 
@@ -143,7 +127,7 @@ export default function AboutPage() {
                   />
                 </div>
                 <div className="text-center">
-                  <h3 className="font-heading text-xl font-bold text-navy">Krishna Bhumarapu</h3>
+                  <h3 className="font-heading text-xl font-bold text-navy">{settings.correspondent_name || site.leadership.correspondent}</h3>
                   <p className="mt-1 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-gold">Director</p>
                   <div className="gold-rule mx-auto mt-4 mb-4" aria-hidden="true">
                     <span className="inline-block h-1.5 w-1.5 rotate-45 bg-gold" />
@@ -165,7 +149,7 @@ export default function AboutPage() {
                   />
                 </div>
                 <div className="text-center">
-                  <h3 className="font-heading text-xl font-bold text-navy">Swetha Bhumarapu</h3>
+                  <h3 className="font-heading text-xl font-bold text-navy">{settings.principal_name || site.leadership.principal}</h3>
                   <p className="mt-1 text-[0.75rem] font-bold uppercase tracking-[0.2em] text-gold">Head Counselor/Principal</p>
                   <div className="gold-rule mx-auto mt-4 mb-4" aria-hidden="true">
                     <span className="inline-block h-1.5 w-1.5 rotate-45 bg-gold" />

@@ -3,10 +3,16 @@ import { PageHero } from "@/components/layout/PageHero";
 import { createClient } from "@/utils/supabase/server";
 import { site } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description: `Photo gallery of ${site.name}.`,
-};
+import { getSchoolSettings } from "@/utils/settings";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Gallery",
+    description: `Photo gallery of ${name}.`,
+  };
+}
 
 export default async function GalleryPage() {
   const supabase = await createClient();

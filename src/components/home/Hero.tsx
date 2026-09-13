@@ -3,15 +3,17 @@ import { ArrowRight, BookOpen, GraduationCap, Sparkles } from "lucide-react";
 import { Crest } from "@/components/brand/Crest";
 import { PeacockEye } from "@/components/brand/PeacockEye";
 import { Reveal } from "@/components/ui/Reveal";
-import { site } from "@/lib/site";
+import { site, type SchoolSettings } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-const chips = [
-  { icon: GraduationCap, label: site.board },
-  { icon: BookOpen, label: `Classes ${site.classes}` },
-  { icon: Sparkles, label: `Estd ${site.established}` },
-];
+export async function Hero() {
+  const settings = await getSchoolSettings();
 
-export function Hero() {
+  const chips = [
+    { icon: GraduationCap, label: settings.board || site.board },
+    { icon: BookOpen, label: `Classes ${settings.classes || site.classes}` },
+    { icon: Sparkles, label: `Estd ${settings.established_year || site.established}` },
+  ];
   return (
     <section className="relative overflow-hidden bg-navy text-cream" aria-labelledby="hero-heading">
       {/* Ambient layers */}
@@ -42,7 +44,7 @@ export function Hero() {
         {/* Name */}
         <Reveal>
           <h1 id="hero-heading" className="mx-auto mt-4 font-heading text-4xl font-bold leading-[1.08] text-cream sm:text-5xl md:text-6xl lg:text-[4.5rem]">
-            Sri Krishna Gurukulam
+            {settings.short_name || site.shortName}
             <span className="mt-2 block text-2xl tracking-[0.24em] text-gold-pale sm:mt-4 sm:text-3xl md:text-4xl">
               SCHOOL
             </span>
@@ -51,7 +53,7 @@ export function Hero() {
             <span className="inline-block h-1.5 w-1.5 rotate-45 bg-gold-pale" />
           </div>
           <p className="mx-auto mt-7 max-w-xl font-heading text-lg italic text-cream/75 sm:text-xl md:text-2xl">
-            “{site.tagline}”
+            “{settings.tagline || site.tagline}”
           </p>
         </Reveal>
 

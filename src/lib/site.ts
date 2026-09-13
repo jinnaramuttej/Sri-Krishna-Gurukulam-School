@@ -55,6 +55,18 @@ export function whatsappHref(message?: string) {
 }
 
 export type SchoolSettings = {
+  // General
+  school_name: string | null;
+  short_name: string | null;
+  tagline: string | null;
+  board: string | null;
+  classes: string | null;
+  established_year: string | null;
+  academic_year: string | null;
+  // Leadership
+  principal_name: string | null;
+  correspondent_name: string | null;
+  // Contact
   phone: string | null;
   email: string | null;
   address: string | null;

@@ -4,11 +4,16 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "Academics & Curriculum",
-  description: `Explore the academic and skill-building programs at ${site.name}.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Academics & Curriculum",
+    description: `Explore the academic and skill-building programs at ${name}.`,
+  };
+}
 
 const earlyYearsItems = [
   { icon: Languages, title: "Telugu Alphabet" },

@@ -7,11 +7,16 @@ import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ImageLightbox } from "@/components/ui/ImageLightbox";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "Achievements",
-  description: `Track record and legacy of the founding team behind ${site.name}.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Achievements",
+    description: `Track record and legacy of the founding team behind ${name}.`,
+  };
+}
 
 const legacyStats = [
   { icon: Building, label: "Established", value: "2020 in Khajipet" },
@@ -22,7 +27,9 @@ const legacyStats = [
   { icon: GraduationCap, label: "10th Board", value: "Excellent Pass Rate" },
 ];
 
-export default function AchievementsPage() {
+export default async function AchievementsPage() {
+  const settings = await getSchoolSettings();
+
   return (
     <>
       <PageHero
@@ -50,7 +57,7 @@ export default function AchievementsPage() {
               <Reveal>
                 <div className="prose prose-navy max-w-none text-ink-soft">
                   <p className="text-lg leading-relaxed">
-                    While <strong>{site.name}</strong> is a new chapter beginning in {site.established}, the team behind it brings years of proven expertise. Since 2020, <em>Krishna&apos;s Skill Training Academy</em> has been a cornerstone of quality education in Khajipet.
+                    While <strong>{settings.school_name || site.name}</strong> is a new chapter beginning in {settings.established_year || site.established}, the team behind it brings years of proven expertise. Since 2020, <em>Krishna&apos;s Skill Training Academy</em> has been a cornerstone of quality education in Khajipet.
                   </p>
                   <p className="mt-4 leading-relaxed">
                     Our rigorous methodology and dedicated focus on foundational concepts have led to consistent student selections across a wide range of prestigious and highly competitive examinations, including:

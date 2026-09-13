@@ -19,7 +19,7 @@ export async function HomeCta() {
       <div className="wrap relative text-center">
         <Reveal>
           <p className="eyebrow justify-center !tracking-[0.34em] text-gold-pale">
-            Admissions Open · {site.academicYear}
+            Admissions Open · {settings.academic_year || site.academicYear}
           </p>
           <h2 id="cta-heading" className="mx-auto mt-4 max-w-2xl font-heading text-3xl font-bold leading-[1.12] text-cream sm:text-5xl">
             Give Your Child the <span className="italic text-gold-pale">Gurukulam</span> Beginning
@@ -28,14 +28,14 @@ export async function HomeCta() {
             <span className="inline-block h-1.5 w-1.5 rotate-45 bg-gold-pale" />
           </div>
           <p className="mx-auto mt-5 max-w-xl text-[0.95rem] leading-relaxed text-cream/70">
-            Seats are limited for the {site.academicYear} academic year, from Nursery to Class X. Speak with our
+            Seats are limited for the {settings.academic_year || site.academicYear} academic year, from {settings.classes || site.classes}. Speak with our
             admissions team on WhatsApp or send an enquiry in a minute.
           </p>
         </Reveal>
 
         <Reveal delay={150} className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
           <a
-            href={getWhatsAppHref(settings.phone, "Namaste! I would like to enquire about admissions for " + site.academicYear + ".")}
+            href={getWhatsAppHref(settings.phone, "Namaste! I would like to enquire about admissions for " + (settings.academic_year || site.academicYear) + ".")}
             target="_blank"
             rel="noopener noreferrer"
             className="btn w-full border border-[#4fce5d]/50 bg-[#1fae53] text-white shadow-[0_12px_28px_-10px_rgb(31_174_83/0.6)] hover:-translate-y-0.5 hover:bg-[#23c05c] sm:w-auto"

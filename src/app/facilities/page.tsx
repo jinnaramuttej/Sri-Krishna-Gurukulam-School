@@ -7,15 +7,21 @@ import { Placeholder, PlaceholderTag } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "Facilities",
-  description: `Facilities at ${site.name} — school vehicle facility and hostel facility, in a disciplined gurukulam atmosphere.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Facilities",
+    description: `Facilities at ${name} — school vehicle facility and hostel facility, in a disciplined gurukulam atmosphere.`,
+  };
+}
 
 export default async function FacilitiesPage() {
   const supabase = await createClient();
   const { data: routes } = await supabase.from("transport_routes").select("*").order("route_name", { ascending: true });
+  const settings = await getSchoolSettings();
   return (
     <>
       <PageHero
@@ -174,7 +180,7 @@ export default async function FacilitiesPage() {
           </Reveal>
           <Reveal delay={180} className="mt-10 text-center">
             <Link href="/admissions" className="btn-gold">
-              Admissions Open {site.academicYear} — Enquire Now
+              Admissions Open {settings.academic_year || site.academicYear} — Enquire Now
             </Link>
           </Reveal>
         </div>

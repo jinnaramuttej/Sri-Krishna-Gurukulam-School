@@ -8,18 +8,24 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { site, getWhatsAppHref } from "@/lib/site";
 import { getSchoolSettings } from "@/utils/settings";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: `Contact ${site.name} — reach the admissions office on WhatsApp, find the campus on the map, and meet the Principal and Correspondent.`,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSchoolSettings();
+  const name = settings.school_name || site.name;
+  return {
+    title: "Contact",
+    description: `Contact ${name} — reach the admissions office on WhatsApp, find the campus on the map, and meet the Principal and Correspondent.`,
+  };
+}
 
-const leaders = [
-  { role: "Principal", name: site.leadership.principal },
-  { role: "Correspondent", name: site.leadership.correspondent },
-];
+
 
 export default async function ContactPage() {
   const settings = await getSchoolSettings();
+
+  const leaders = [
+    { role: "Principal", name: settings.principal_name || site.leadership.principal },
+    { role: "Correspondent", name: settings.correspondent_name || site.leadership.correspondent },
+  ];
 
   return (
     <>

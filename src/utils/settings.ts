@@ -9,6 +9,20 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
   } catch (error) {
     // Return empty if table doesn't exist yet or query fails
   }
-  return { phone: null, email: null, address: null, map_url: null };
+  return { 
+    school_name: null, 
+    short_name: null,
+    tagline: null,
+    board: null,
+    classes: null,
+    established_year: null,
+    academic_year: null,
+    principal_name: null,
+    correspondent_name: null,
+    phone: null, 
+    email: null, 
+    address: null, 
+    map_url: null 
+  };
 
 }
