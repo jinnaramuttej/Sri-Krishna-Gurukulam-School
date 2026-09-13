@@ -33,3 +33,10 @@ export async function deleteGalleryImage(id: string, image_url: string) {
   revalidatePath("/admin/gallery")
   revalidatePath("/gallery")
 }
+
+export async function updateGalleryCaption(id: string, caption: string) {
+  const supabase = await createClient()
+  await supabase.from("gallery").update({ caption }).eq("id", id)
+  revalidatePath("/admin/gallery")
+  revalidatePath("/gallery")
+}

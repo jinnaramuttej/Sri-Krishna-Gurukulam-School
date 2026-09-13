@@ -2,8 +2,7 @@ import Link from "next/link";
 import { BedDouble, Bus, GraduationCap, MapPin } from "lucide-react";
 import { Crest } from "@/components/brand/Crest";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
-import { navLinks, site } from "@/lib/site";
-import { getWhatsAppHref, type SchoolSettings } from "@/utils/settings";
+import { navLinks, site, getWhatsAppHref, type SchoolSettings } from "@/lib/site";
 
 export function SiteFooter({ settings }: { settings: SchoolSettings }) {
   const year = new Date().getFullYear();

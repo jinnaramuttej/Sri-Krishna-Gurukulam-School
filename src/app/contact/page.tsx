@@ -5,8 +5,8 @@ import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
 import { Placeholder, PlaceholderTag } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { site } from "@/lib/site";
-import { getSchoolSettings, getWhatsAppHref } from "@/utils/settings";
+import { site, getWhatsAppHref } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
 export const metadata: Metadata = {
   title: "Contact",

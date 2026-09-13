@@ -6,8 +6,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Menu, Sparkles, X } from "lucide-react";
 import { Crest } from "@/components/brand/Crest";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
-import { navLinks, site } from "@/lib/site";
-import { getWhatsAppHref, type SchoolSettings } from "@/utils/settings";
+import { navLinks, site, getWhatsAppHref, type SchoolSettings } from "@/lib/site";
 
 export function SiteHeader({ settings }: { settings: SchoolSettings }) {
   const pathname = usePathname();

@@ -3,8 +3,8 @@ import { ArrowRight } from "lucide-react";
 import { PeacockEye } from "@/components/brand/PeacockEye";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
 import { Reveal } from "@/components/ui/Reveal";
-import { site } from "@/lib/site";
-import { getSchoolSettings, getWhatsAppHref } from "@/utils/settings";
+import { site, getWhatsAppHref } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 
 /** Closing contact / admissions call-to-action for the homepage. */
 export async function HomeCta() {

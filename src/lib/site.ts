@@ -53,3 +53,17 @@ export function whatsappHref(message?: string) {
   const base = `https://wa.me/${site.whatsapp.number}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
+
+export type SchoolSettings = {
+  phone: string | null;
+  email: string | null;
+  address: string | null;
+  map_url: string | null;
+};
+
+export function getWhatsAppHref(phone: string | null, message?: string) {
+  const defaultNumber = site.whatsapp.number;
+  const cleanNumber = phone ? phone.replace(/\D/g, "") : defaultNumber;
+  const base = `https://wa.me/${cleanNumber}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
