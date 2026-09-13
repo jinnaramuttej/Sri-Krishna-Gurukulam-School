@@ -114,19 +114,16 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
               )}
               
               <div className="w-full mt-auto">
-                <input
-                  type="file"
-                  accept="image/*"
-                  ref={(el) => { fileInputRefs.current[field] = el }}
-                  onChange={(e) => handleUpload(e, field)}
-                  disabled={loadingField === field}
-                  className="sr-only"
-                />
-                <button 
-                  onClick={() => fileInputRefs.current[field]?.click()}
-                  disabled={loadingField === field}
-                  className="w-full flex items-center justify-center gap-2 h-[38px] bg-brand/10 text-brand font-semibold rounded hover:bg-brand/20 transition disabled:opacity-50"
+                <label 
+                  className={`w-full flex items-center justify-center gap-2 h-[38px] bg-brand/10 text-brand font-semibold rounded transition ${loadingField === field ? 'opacity-50 cursor-not-allowed' : 'hover:bg-brand/20 cursor-pointer'}`}
                 >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleUpload(e, field)}
+                    disabled={loadingField === field}
+                    className="sr-only"
+                  />
                   {loadingField === field ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
@@ -135,7 +132,7 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
                       {currentUrl ? "Replace Image" : "Upload Image"}
                     </>
                   )}
-                </button>
+                </label>
               </div>
             </div>
           )
