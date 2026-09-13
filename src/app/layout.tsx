@@ -4,6 +4,7 @@ import { Inter, Zilla_Slab } from "next/font/google";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { site } from "@/lib/site";
+import { getSchoolSettings } from "@/utils/settings";
 import "./globals.css";
 
 const heading = Zilla_Slab({
@@ -54,7 +55,9 @@ const schoolJsonLd = {
   description: `${site.board} school with classes ${site.classes}, gurukulam values and modern academic standards.`,
 };
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
+  const settings = await getSchoolSettings();
+
   return (
     <html lang="en" className={`${heading.variable} ${body.variable}`}>
       <body>
@@ -65,9 +68,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to main content
         </a>
-        <SiteHeader />
+        <SiteHeader settings={settings} />
         <main id="main-content">{children}</main>
-        <SiteFooter />
+        <SiteFooter settings={settings} />
       </body>
     </html>
   );

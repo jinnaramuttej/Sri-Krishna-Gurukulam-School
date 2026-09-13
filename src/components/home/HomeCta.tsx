@@ -3,10 +3,13 @@ import { ArrowRight } from "lucide-react";
 import { PeacockEye } from "@/components/brand/PeacockEye";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
 import { Reveal } from "@/components/ui/Reveal";
-import { site, whatsappHref } from "@/lib/site";
+import { site } from "@/lib/site";
+import { getSchoolSettings, getWhatsAppHref } from "@/utils/settings";
 
 /** Closing contact / admissions call-to-action for the homepage. */
-export function HomeCta() {
+export async function HomeCta() {
+  const settings = await getSchoolSettings();
+  
   return (
     <section className="relative overflow-hidden bg-navy py-20 text-cream sm:py-24" aria-labelledby="cta-heading">
       <div className="peacock-glow absolute inset-0" aria-hidden="true" />
@@ -32,14 +35,14 @@ export function HomeCta() {
 
         <Reveal delay={150} className="mt-9 flex flex-col items-center justify-center gap-3.5 sm:flex-row">
           <a
-            href={whatsappHref("Namaste! I would like to enquire about admissions for " + site.academicYear + ".")}
+            href={getWhatsAppHref(settings.phone, "Namaste! I would like to enquire about admissions for " + site.academicYear + ".")}
             target="_blank"
             rel="noopener noreferrer"
             className="btn w-full border border-[#4fce5d]/50 bg-[#1fae53] text-white shadow-[0_12px_28px_-10px_rgb(31_174_83/0.6)] hover:-translate-y-0.5 hover:bg-[#23c05c] sm:w-auto"
-            aria-label={`Chat on WhatsApp at ${site.whatsapp.display}`}
+            aria-label={`Chat on WhatsApp at ${settings.phone || site.whatsapp.display}`}
           >
             <WhatsAppIcon className="h-4 w-4" />
-            WhatsApp {site.whatsapp.display}
+            WhatsApp {settings.phone || site.whatsapp.display}
           </a>
           <Link href="/admissions#enquiry-form" className="btn-outline-light w-full sm:w-auto">
             Fill the Enquiry Form
@@ -48,9 +51,11 @@ export function HomeCta() {
         </Reveal>
 
         <Reveal delay={240}>
-          <p className="mt-6 text-[0.65rem] uppercase tracking-[0.2em] text-cream/40">
-            [Placeholder WhatsApp number — awaiting confirmation from school]
-          </p>
+          {!settings.phone && (
+            <p className="mt-6 text-[0.65rem] uppercase tracking-[0.2em] text-cream/40">
+              [Placeholder WhatsApp number — awaiting confirmation from school]
+            </p>
+          )}
         </Reveal>
       </div>
     </section>

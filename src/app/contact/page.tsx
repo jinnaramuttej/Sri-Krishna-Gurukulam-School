@@ -5,7 +5,8 @@ import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
 import { Placeholder, PlaceholderTag } from "@/components/ui/Placeholder";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { site, whatsappHref } from "@/lib/site";
+import { site } from "@/lib/site";
+import { getSchoolSettings, getWhatsAppHref } from "@/utils/settings";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -17,7 +18,9 @@ const leaders = [
   { role: "Correspondent", name: site.leadership.correspondent },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const settings = await getSchoolSettings();
+
   return (
     <>
       <PageHero
@@ -47,12 +50,12 @@ export default function ContactPage() {
                       Fastest way to reach the admissions office.
                     </p>
                     <p className="mt-3 font-heading text-2xl font-bold tracking-wide text-navy">
-                      {site.whatsapp.display}
+                      {settings.phone || site.whatsapp.display}
                     </p>
-                    <PlaceholderTag>Placeholder number — awaiting confirmation</PlaceholderTag>
+                    {!settings.phone && <PlaceholderTag>Placeholder number — awaiting confirmation</PlaceholderTag>}
                     <div className="mt-4">
                       <a
-                        href={whatsappHref("Namaste! I have a question about the school.")}
+                        href={getWhatsAppHref(settings.phone, "Namaste! I have a question about the school.")}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn border border-[#4fce5d]/50 bg-[#1fae53] text-white hover:-translate-y-0.5 hover:bg-[#23c05c]"
@@ -75,15 +78,25 @@ export default function ContactPage() {
                   <div>
                     <h2 className="font-heading text-xl font-bold text-navy">Visit the Campus</h2>
                     <address className="mt-2 text-sm not-italic leading-relaxed text-ink-soft">
-                      {site.address.lines.map((line) => (
-                        <span key={line} className="block">
-                          {line}
-                        </span>
-                      ))}
+                      {settings.address ? (
+                        settings.address.split('\n').map((line) => (
+                          <span key={line} className="block">
+                            {line}
+                          </span>
+                        ))
+                      ) : (
+                        site.address.lines.map((line) => (
+                          <span key={line} className="block">
+                            {line}
+                          </span>
+                        ))
+                      )}
                     </address>
-                    <div className="mt-3">
-                      <PlaceholderTag>Placeholder — awaiting full address</PlaceholderTag>
-                    </div>
+                    {!settings.address && (
+                      <div className="mt-3">
+                        <PlaceholderTag>Placeholder — awaiting full address</PlaceholderTag>
+                      </div>
+                    )}
                   </div>
                 </div>
               </article>
@@ -114,16 +127,18 @@ export default function ContactPage() {
             <div className="card overflow-hidden p-2.5">
               <iframe
                 title={`Map showing location of ${site.name}`}
-                src={site.mapEmbedUrl}
+                src={settings.map_url || site.mapEmbedUrl}
                 className="h-80 w-full rounded-xl border-0 sm:h-[26rem]"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
                 allowFullScreen
               />
-              <p className="flex flex-wrap items-center justify-center gap-2 px-4 py-3 text-center text-[0.68rem] uppercase tracking-[0.16em] text-ink-soft">
-                <span className="placeholder-tag">[Placeholder map pin]</span>
-                Exact Google Maps location will replace this once shared by the school.
-              </p>
+              {!settings.map_url && (
+                <p className="flex flex-wrap items-center justify-center gap-2 px-4 py-3 text-center text-[0.68rem] uppercase tracking-[0.16em] text-ink-soft">
+                  <span className="placeholder-tag">[Placeholder map pin]</span>
+                  Exact Google Maps location will replace this once shared by the school.
+                </p>
+              )}
             </div>
           </Reveal>
         </div>

@@ -2,9 +2,10 @@ import Link from "next/link";
 import { BedDouble, Bus, GraduationCap, MapPin } from "lucide-react";
 import { Crest } from "@/components/brand/Crest";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
-import { navLinks, site, whatsappHref } from "@/lib/site";
+import { navLinks, site } from "@/lib/site";
+import { getWhatsAppHref, type SchoolSettings } from "@/utils/settings";
 
-export function SiteFooter() {
+export function SiteFooter({ settings }: { settings: SchoolSettings }) {
   const year = new Date().getFullYear();
 
   return (
@@ -84,26 +85,38 @@ export function SiteFooter() {
               <div className="flex items-start gap-2.5 text-sm leading-relaxed">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand" aria-hidden="true" />
                 <div>
-                  {site.address.lines.map((line) => (
-                    <span key={line} className="block">
-                      {line}
-                    </span>
-                  ))}
-                  <span className="placeholder-tag mt-2">[Placeholder — awaiting address]</span>
+                  {settings.address ? (
+                    settings.address.split('\n').map((line) => (
+                      <span key={line} className="block">
+                        {line}
+                      </span>
+                    ))
+                  ) : (
+                    <>
+                      {site.address.lines.map((line) => (
+                        <span key={line} className="block">
+                          {line}
+                        </span>
+                      ))}
+                      <span className="placeholder-tag mt-2">[Placeholder — awaiting address]</span>
+                    </>
+                  )}
                 </div>
               </div>
               <a
-                href={whatsappHref("Namaste! I would like to know more about the school.")}
+                href={getWhatsAppHref(settings.phone, "Namaste! I would like to know more about the school.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#4fce5d]/40 bg-[#1fae53]/15 px-5 py-2.5 text-sm font-semibold text-cream transition hover:border-[#4fce5d]/70 hover:bg-[#1fae53]/25"
               >
                 <WhatsAppIcon className="h-4 w-4 text-[#4fce5d]" />
-                {site.whatsapp.display}
+                {settings.phone || site.whatsapp.display}
               </a>
-              <span className="mt-2 block text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">
-                [Placeholder number — awaiting confirmation]
-              </span>
+              {!settings.phone && (
+                <span className="mt-2 block text-[0.65rem] uppercase tracking-[0.16em] text-cream/40">
+                  [Placeholder number — awaiting confirmation]
+                </span>
+              )}
             </address>
           </div>
         </div>

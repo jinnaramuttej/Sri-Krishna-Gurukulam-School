@@ -1,8 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { addGalleryImage, deleteGalleryImage } from "./actions"
-import { Trash2, Loader2, UploadCloud, Image as ImageIcon } from "lucide-react"
+import { addGalleryImage, deleteGalleryImage, updateGalleryCaption } from "./actions"
+import { Trash2, Loader2, UploadCloud, Image as ImageIcon, Pencil, Check, X } from "lucide-react"
 import { createClient } from "@/utils/supabase/client"
 import imageCompression from "browser-image-compression"
 
@@ -16,6 +16,8 @@ type GalleryImage = {
 export function GalleryClient({ initialImages }: { initialImages: GalleryImage[] }) {
   const [isUploading, setIsUploading] = useState(false)
   const [loadingId, setLoadingId] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editCaptionValue, setEditCaptionValue] = useState("")
   const [caption, setCaption] = useState("")
   const [file, setFile] = useState<File | null>(null)
   
@@ -64,6 +66,13 @@ export function GalleryClient({ initialImages }: { initialImages: GalleryImage[]
     if (!confirm("Are you sure you want to delete this image?")) return
     setLoadingId(id)
     await deleteGalleryImage(id, url)
+    setLoadingId(null)
+  }
+
+  const handleUpdateCaption = async (id: string) => {
+    setLoadingId(id)
+    await updateGalleryCaption(id, editCaptionValue)
+    setEditingId(null)
     setLoadingId(null)
   }
 
@@ -120,16 +129,55 @@ export function GalleryClient({ initialImages }: { initialImages: GalleryImage[]
                   alt={img.caption || "Gallery photo"} 
                   className="w-full h-48 object-cover group-hover:scale-105 transition duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
-                  <p className="text-white text-sm font-medium truncate mb-2">{img.caption || "No caption"}</p>
-                  <button 
-                    onClick={() => handleDelete(img.id, img.image_url)}
-                    disabled={loadingId === img.id}
-                    className="self-end bg-red-500 text-white p-2 rounded hover:bg-red-600 transition disabled:opacity-50"
-                  >
-                    {loadingId === img.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
-                  </button>
-                </div>
+                
+                {editingId === img.id ? (
+                  <div className="absolute inset-0 bg-navy/90 flex flex-col justify-center p-4">
+                    <input 
+                      autoFocus
+                      value={editCaptionValue}
+                      onChange={(e) => setEditCaptionValue(e.target.value)}
+                      placeholder="Enter new caption"
+                      className="field-input text-sm py-2 mb-3 bg-white/10 text-white border-white/20 placeholder:text-white/50 focus:border-white/50"
+                    />
+                    <div className="flex gap-2 justify-end">
+                      <button 
+                        onClick={() => handleUpdateCaption(img.id)}
+                        disabled={loadingId === img.id}
+                        className="bg-brand text-navy p-2 rounded hover:bg-brand/80 transition disabled:opacity-50"
+                      >
+                        {loadingId === img.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Check className="w-4 h-4" />}
+                      </button>
+                      <button 
+                        onClick={() => setEditingId(null)}
+                        className="bg-white/10 text-white p-2 rounded hover:bg-white/20 transition"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex flex-col justify-end p-4">
+                    <p className="text-white text-sm font-medium truncate mb-2">{img.caption || "No caption"}</p>
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        onClick={() => {
+                          setEditCaptionValue(img.caption || "")
+                          setEditingId(img.id)
+                        }}
+                        className="bg-white/20 text-white p-2 rounded hover:bg-white/30 transition"
+                      >
+                        <Pencil className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(img.id, img.image_url)}
+                        disabled={loadingId === img.id}
+                        className="bg-red-500 text-white p-2 rounded hover:bg-red-600 transition disabled:opacity-50"
+                      >
+                        {loadingId === img.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

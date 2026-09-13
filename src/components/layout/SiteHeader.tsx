@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { ArrowRight, Menu, Sparkles, X } from "lucide-react";
 import { Crest } from "@/components/brand/Crest";
 import { WhatsAppIcon } from "@/components/brand/WhatsAppIcon";
-import { navLinks, site, whatsappHref } from "@/lib/site";
+import { navLinks, site } from "@/lib/site";
+import { getWhatsAppHref, type SchoolSettings } from "@/utils/settings";
 
-export function SiteHeader() {
+export function SiteHeader({ settings }: { settings: SchoolSettings }) {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -55,14 +56,14 @@ export function SiteHeader() {
             />
           </Link>
           <a
-            href={whatsappHref("Namaste! I would like to know more about admissions.")}
+            href={getWhatsAppHref(settings.phone, "Namaste! I would like to know more about admissions.")}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex shrink-0 items-center gap-1.5 font-semibold text-cream/85 hover:text-white"
-            aria-label={`Chat on WhatsApp at ${site.whatsapp.display}`}
+            aria-label={`Chat on WhatsApp at ${settings.phone || site.whatsapp.display}`}
           >
             <WhatsAppIcon className="h-3.5 w-3.5 text-[#4fce5d]" />
-            <span className="hidden sm:inline">{site.whatsapp.display}</span>
+            <span className="hidden sm:inline">{settings.phone || site.whatsapp.display}</span>
             <span className="sm:hidden">WhatsApp</span>
           </a>
         </div>
@@ -210,7 +211,7 @@ export function SiteHeader() {
                 Admissions Open {site.academicYear}
               </Link>
               <a
-                href={whatsappHref("Namaste! I would like to know more about admissions.")}
+                href={getWhatsAppHref(settings.phone, "Namaste! I would like to know more about admissions.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 tabIndex={open ? 0 : -1}
