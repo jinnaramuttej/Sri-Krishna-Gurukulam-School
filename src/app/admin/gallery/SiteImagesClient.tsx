@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { updateSiteImage } from "./actions"
 import { Loader2, UploadCloud, Trash2, ImageIcon } from "lucide-react"
@@ -18,6 +18,7 @@ const SITE_IMAGES = [
 
 export function SiteImagesClient({ settings }: { settings: SchoolSettings | null }) {
   const [loadingField, setLoadingField] = useState<string | null>(null)
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
   const supabase = createClient()
   const router = useRouter()
 
@@ -112,15 +113,17 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
                 </div>
               )}
               
-              <div className="w-full relative mt-auto">
+              <div className="w-full mt-auto">
                 <input
                   type="file"
                   accept="image/*"
+                  ref={(el) => { fileInputRefs.current[field] = el }}
                   onChange={(e) => handleUpload(e, field)}
                   disabled={loadingField === field}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer disabled:cursor-not-allowed z-10"
+                  className="hidden"
                 />
                 <button 
+                  onClick={() => fileInputRefs.current[field]?.click()}
                   disabled={loadingField === field}
                   className="w-full flex items-center justify-center gap-2 h-[38px] bg-brand/10 text-brand font-semibold rounded hover:bg-brand/20 transition disabled:opacity-50"
                 >
