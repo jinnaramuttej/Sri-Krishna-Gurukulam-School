@@ -47,14 +47,22 @@ export async function updateSiteImage(field: string, image_url: string | null) {
   const { data } = await supabase.from("school_settings").select("id").limit(1)
   
   if (data && data.length > 0) {
-    await supabase.from("school_settings").update({ 
+    const { error } = await supabase.from("school_settings").update({ 
       [field]: image_url,
       updated_at: new Date().toISOString()
     } as any).eq("id", data[0].id)
+    if (error) {
+      console.error("Update site image error:", error)
+      throw error
+    }
   } else {
-    await supabase.from("school_settings").insert({ 
+    const { error } = await supabase.from("school_settings").insert({ 
       [field]: image_url 
     } as any)
+    if (error) {
+      console.error("Insert site image error:", error)
+      throw error
+    }
   }
   
   revalidatePath("/", "layout")
