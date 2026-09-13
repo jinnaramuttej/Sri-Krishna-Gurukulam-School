@@ -120,7 +120,7 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
                   ref={(el) => { fileInputRefs.current[field] = el }}
                   onChange={(e) => handleUpload(e, field)}
                   disabled={loadingField === field}
-                  className="hidden"
+                  className="sr-only"
                 />
                 <button 
                   onClick={() => fileInputRefs.current[field]?.click()}
