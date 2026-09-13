@@ -22,7 +22,12 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
     phone: null, 
     email: null, 
     address: null, 
-    map_url: null 
+    map_url: null,
+    director_image_url: null,
+    principal_image_url: null,
+    vehicle_image_url: null,
+    hostel_image_url: null,
+    campus_image_url: null
   };
 
 }

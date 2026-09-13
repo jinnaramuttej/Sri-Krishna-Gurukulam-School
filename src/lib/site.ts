@@ -71,6 +71,12 @@ export type SchoolSettings = {
   email: string | null;
   address: string | null;
   map_url: string | null;
+  // Site Images
+  director_image_url: string | null;
+  principal_image_url: string | null;
+  vehicle_image_url: string | null;
+  hostel_image_url: string | null;
+  campus_image_url: string | null;
 };
 
 export function getWhatsAppHref(phone: string | null, message?: string) {

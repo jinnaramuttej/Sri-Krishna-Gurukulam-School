@@ -119,12 +119,16 @@ export default async function AboutPage() {
             <Reveal>
               <article className="card flex h-full flex-col p-6 sm:p-8">
                 <div className="mb-6 aspect-square w-full max-w-[240px] mx-auto overflow-hidden rounded-2xl bg-navy/[0.03]">
-                  <Placeholder
-                    kind="photo"
-                    label="PHOTO NEEDED — Director Portrait"
-                    note="Portrait of Krishna Bhumarapu cropped from academy banner"
-                    className="h-full w-full border-none"
-                  />
+                  {settings.director_image_url ? (
+                    <img src={settings.director_image_url} alt={settings.correspondent_name || site.leadership.correspondent} className="h-full w-full object-cover" />
+                  ) : (
+                    <Placeholder
+                      kind="photo"
+                      label="PHOTO NEEDED — Director Portrait"
+                      note="Portrait of Krishna Bhumarapu cropped from academy banner"
+                      className="h-full w-full border-none"
+                    />
+                  )}
                 </div>
                 <div className="text-center">
                   <h3 className="font-heading text-xl font-bold text-navy">{settings.correspondent_name || site.leadership.correspondent}</h3>
@@ -141,12 +145,16 @@ export default async function AboutPage() {
             <Reveal delay={100}>
               <article className="card flex h-full flex-col p-6 sm:p-8">
                 <div className="mb-6 aspect-square w-full max-w-[240px] mx-auto overflow-hidden rounded-2xl bg-navy/[0.03]">
-                  <Placeholder
-                    kind="photo"
-                    label="PHOTO NEEDED — Principal Portrait"
-                    note="Portrait of Swetha Bhumarapu cropped from academy banner"
-                    className="h-full w-full border-none"
-                  />
+                  {settings.principal_image_url ? (
+                    <img src={settings.principal_image_url} alt={settings.principal_name || site.leadership.principal} className="h-full w-full object-cover" />
+                  ) : (
+                    <Placeholder
+                      kind="photo"
+                      label="PHOTO NEEDED — Principal Portrait"
+                      note="Portrait of Swetha Bhumarapu cropped from academy banner"
+                      className="h-full w-full border-none"
+                    />
+                  )}
                 </div>
                 <div className="text-center">
                   <h3 className="font-heading text-xl font-bold text-navy">{settings.principal_name || site.leadership.principal}</h3>

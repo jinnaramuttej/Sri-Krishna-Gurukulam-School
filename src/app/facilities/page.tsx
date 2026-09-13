@@ -100,12 +100,16 @@ export default async function FacilitiesPage() {
           </Reveal>
 
           <Reveal delay={120}>
-            <Placeholder
-              kind="photo"
-              label="PHOTO NEEDED — school vehicles / transport"
-              note="A real photograph of the school vehicles will be placed here once provided by the school."
-              className="aspect-[4/3]"
-            />
+            {settings.vehicle_image_url ? (
+              <img src={settings.vehicle_image_url} alt="Vehicle Facility" className="aspect-[4/3] w-full rounded-2xl object-cover shadow-card" />
+            ) : (
+              <Placeholder
+                kind="photo"
+                label="PHOTO NEEDED — school vehicles / transport"
+                note="A real photograph of the school vehicles will be placed here once provided by the school."
+                className="aspect-[4/3]"
+              />
+            )}
           </Reveal>
         </div>
       </section>
@@ -152,12 +156,16 @@ export default async function FacilitiesPage() {
           </Reveal>
 
           <Reveal delay={120} className="lg:order-1">
-            <Placeholder
-              kind="photo"
-              label="PHOTO NEEDED — hostel rooms / dormitory"
-              note="A real photograph of the hostel accommodation will be placed here once provided by the school."
-              className="aspect-[4/3]"
-            />
+            {settings.hostel_image_url ? (
+              <img src={settings.hostel_image_url} alt="Hostel Facility" className="aspect-[4/3] w-full rounded-2xl object-cover shadow-card" />
+            ) : (
+              <Placeholder
+                kind="photo"
+                label="PHOTO NEEDED — hostel rooms / dormitory"
+                note="A real photograph of the hostel accommodation will be placed here once provided by the school."
+                className="aspect-[4/3]"
+              />
+            )}
           </Reveal>
         </div>
       </section>
@@ -171,12 +179,16 @@ export default async function FacilitiesPage() {
             lead="As a newly established gurukulam, our campus keeps growing — each addition will be announced here with photographs and details."
           />
           <Reveal delay={120} className="mx-auto mt-12 max-w-4xl">
-            <Placeholder
-              kind="photo"
-              label="PHOTO NEEDED — campus & classrooms"
-              note="A photo gallery of the campus, classrooms and activities will be added here once real photographs are provided by the school."
-              className="aspect-video"
-            />
+            {settings.campus_image_url ? (
+              <img src={settings.campus_image_url} alt="Campus and Facilities" className="aspect-video w-full rounded-2xl object-cover shadow-card" />
+            ) : (
+              <Placeholder
+                kind="photo"
+                label="PHOTO NEEDED — campus & classrooms"
+                note="A photo gallery of the campus, classrooms and activities will be added here once real photographs are provided by the school."
+                className="aspect-video"
+              />
+            )}
           </Reveal>
           <Reveal delay={180} className="mt-10 text-center">
             <Link href="/admissions" className="btn-gold">

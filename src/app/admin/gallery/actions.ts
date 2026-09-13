@@ -40,3 +40,22 @@ export async function updateGalleryCaption(id: string, caption: string) {
   revalidatePath("/admin/gallery")
   revalidatePath("/gallery")
 }
+
+export async function updateSiteImage(field: string, image_url: string | null) {
+  const supabase = await createClient()
+  
+  const { data } = await supabase.from("school_settings").select("id").limit(1)
+  
+  if (data && data.length > 0) {
+    await supabase.from("school_settings").update({ 
+      [field]: image_url,
+      updated_at: new Date().toISOString()
+    }).eq("id", data[0].id)
+  } else {
+    await supabase.from("school_settings").insert({ 
+      [field]: image_url 
+    })
+  }
+  
+  revalidatePath("/", "layout")
+}
