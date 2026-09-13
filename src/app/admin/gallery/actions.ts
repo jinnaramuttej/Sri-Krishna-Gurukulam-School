@@ -53,7 +53,7 @@ export async function updateSiteImage(field: string, image_url: string | null) {
     } as any).eq("id", data[0].id)
     if (error) {
       console.error("Update site image error:", error)
-      throw error
+      throw new Error(`Database Update Error: ${error.message}`)
     }
   } else {
     const { error } = await supabase.from("school_settings").insert({ 
@@ -61,7 +61,7 @@ export async function updateSiteImage(field: string, image_url: string | null) {
     } as any)
     if (error) {
       console.error("Insert site image error:", error)
-      throw error
+      throw new Error(`Database Insert Error: ${error.message}`)
     }
   }
   

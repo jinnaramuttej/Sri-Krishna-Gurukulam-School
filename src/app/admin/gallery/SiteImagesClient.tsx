@@ -51,9 +51,9 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
       await updateSiteImage(field, publicUrl)
       router.refresh()
       
-    } catch (err) {
+    } catch (err: any) {
       console.error("Upload error:", err)
-      alert("Failed to upload image.")
+      alert(err.message || "Failed to upload image.")
     } finally {
       setLoadingField(null)
     }
@@ -66,9 +66,9 @@ export function SiteImagesClient({ settings }: { settings: SchoolSettings | null
     try {
       await updateSiteImage(field, null)
       router.refresh()
-    } catch (err) {
+    } catch (err: any) {
       console.error("Delete error:", err)
-      alert("Failed to remove image.")
+      alert(err.message || "Failed to remove image.")
     } finally {
       setLoadingField(null)
     }
