@@ -1,7 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
 import { type SchoolSettings } from "@/lib/site";
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function getSchoolSettings(): Promise<SchoolSettings> {
+  noStore();
   try {
     const supabase = await createClient();
     const { data } = await supabase.from("school_settings").select("*").limit(1).single();
