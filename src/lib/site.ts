@@ -7,33 +7,26 @@
  */
 
 export const site = {
-  name: "Sri Balaji's Sri Krishna Gurukulam School",
+  name: "Sri Krishna Gurukulam School",
   shortName: "Sri Krishna Gurukulam",
-  parentBrand: "Sri Balaji's",
   tagline: "A Right Choice for Your Children's Bright Future",
   board: "SSC Board",
-  classes: "Nursery – Class X",
+  classes: "Nursery to X Class",
   established: "2026",
   academicYear: "2026–27",
 
-  /** PLACEHOLDER — awaiting confirmed WhatsApp number from client */
   whatsapp: {
-    display: "+91 XXXXX XXXXX",
-    number: "91XXXXXXXXXX",
-    isPlaceholder: true,
+    display: "+91 91213 17327",
+    number: "919121317327",
   },
 
-  /** PLACEHOLDER — awaiting confirmed address from client */
   address: {
-    lines: ["School Campus Address", "Village / Town, District", "State – PIN Code"],
-    isPlaceholder: true,
+    lines: ["M.L.A. Street, Mydukur Road", "Khajipet, Kadapa"],
   },
 
-  /** PLACEHOLDER — awaiting names from client */
   leadership: {
-    principal: "Name to be announced",
-    correspondent: "Name to be announced",
-    isPlaceholder: true,
+    principal: "Swetha Bhumarapu",
+    correspondent: "Krishna Bhumarapu",
   },
 
   /**
@@ -42,8 +35,7 @@ export const site = {
    * school's Google Maps pin is provided by the client.
    */
   mapEmbedUrl:
-    "https://www.google.com/maps?q=Sri+Balaji%27s+Sri+Krishna+Gurukulam+School&output=embed",
-  mapIsPlaceholder: true,
+    "https://www.google.com/maps?q=Sri+Krishna+Gurukulam+School+Khajipet+Kadapa&output=embed",
 
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000",
 } as const;

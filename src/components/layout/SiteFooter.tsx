@@ -18,9 +18,6 @@ export function SiteFooter({ settings }: { settings: SchoolSettings }) {
             <div className="flex items-center gap-4">
               <Crest size={64} className="drop-shadow-[0_4px_14px_rgb(0_0_0/0.45)]" />
               <div>
-                <p className="text-[0.55rem] font-bold uppercase tracking-[0.34em] text-gold-pale">
-                  {site.parentBrand}
-                </p>
                 <p className="font-heading text-lg font-bold leading-tight text-cream">
                   Sri Krishna Gurukulam School
                 </p>

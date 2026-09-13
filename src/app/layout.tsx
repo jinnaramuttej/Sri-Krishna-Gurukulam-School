@@ -30,7 +30,6 @@ export const metadata: Metadata = {
   description: `${site.name} — a gurukulam-inspired ${site.board} school offering classes ${site.classes} with disciplined, value-based, English-medium education. Admissions open for ${site.academicYear}.`,
   keywords: [
     "Sri Krishna Gurukulam School",
-    "Sri Balaji's school",
     "SSC school",
     "gurukulam school",
     "admissions open",

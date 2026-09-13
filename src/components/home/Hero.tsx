@@ -40,17 +40,18 @@ export function Hero() {
         </Reveal>
 
         {/* Name */}
-        <Reveal delay={120}>
-          <p className="eyebrow mt-9 justify-center tracking-[0.4em] text-gold-pale">{site.parentBrand}</p>
-          <h1 id="hero-heading" className="mt-3 font-heading font-bold leading-[1.02]">
-            <span className="block text-[2.6rem] text-cream sm:text-6xl lg:text-7xl">Sri Krishna Gurukulam</span>
-            <span className="mt-1 block text-xl tracking-[0.5em] text-gold-light sm:text-2xl">SCHOOL</span>
+        <Reveal>
+          <h1 id="hero-heading" className="mx-auto mt-4 font-heading text-4xl font-bold leading-[1.08] text-cream sm:text-5xl md:text-6xl lg:text-[4.5rem]">
+            Sri Krishna Gurukulam
+            <span className="mt-2 block text-2xl tracking-[0.24em] text-gold-pale sm:mt-4 sm:text-3xl md:text-4xl">
+              SCHOOL
+            </span>
           </h1>
-          <div className="gold-rule mt-6 text-gold-pale" aria-hidden="true">
+          <div className="gold-rule mt-8 text-gold-pale" aria-hidden="true">
             <span className="inline-block h-1.5 w-1.5 rotate-45 bg-gold-pale" />
           </div>
-          <p className="mx-auto mt-5 max-w-xl font-heading text-lg italic leading-relaxed text-cream/85 sm:text-xl">
-            “A Right Choice for Your Children’s <span className="font-semibold text-gold-pale">Bright Future</span>”
+          <p className="mx-auto mt-7 max-w-xl font-heading text-lg italic text-cream/75 sm:text-xl md:text-2xl">
+            “{site.tagline}”
           </p>
         </Reveal>
 

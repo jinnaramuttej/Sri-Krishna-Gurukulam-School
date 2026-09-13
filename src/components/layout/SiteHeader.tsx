@@ -85,9 +85,6 @@ export function SiteHeader({ settings }: { settings: SchoolSettings }) {
               className="shrink-0 drop-shadow-[0_3px_8px_rgb(26_42_74/0.3)] transition-transform duration-500 group-hover:rotate-[8deg]"
             />
             <span className="min-w-0 leading-tight">
-              <span className="block text-[0.55rem] font-bold uppercase tracking-[0.34em] text-gold">
-                {site.parentBrand}
-              </span>
               <span className="block truncate font-heading text-[0.95rem] font-bold text-navy sm:text-lg">
                 Sri Krishna Gurukulam <span className="text-gold">School</span>
               </span>
