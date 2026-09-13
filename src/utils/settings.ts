@@ -6,7 +6,7 @@ export async function getSchoolSettings(): Promise<SchoolSettings> {
   noStore();
   try {
     const supabase = await createClient();
-    const { data, error } = await supabase.from("school_settings").select("*").limit(1);
+    const { data, error } = await supabase.from("school_settings").select("*").order("id", { ascending: true }).limit(1);
     if (error) console.error("getSchoolSettings error:", error);
     if (data && data.length > 0) return data[0] as SchoolSettings;
   } catch (error) {

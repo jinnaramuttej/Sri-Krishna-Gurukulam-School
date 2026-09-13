@@ -44,7 +44,7 @@ export async function updateGalleryCaption(id: string, caption: string) {
 export async function updateSiteImage(field: string, image_url: string | null) {
   const supabase = await createClient()
   
-  const { data } = await supabase.from("school_settings").select("id").limit(1)
+  const { data } = await supabase.from("school_settings").select("id").order("id", { ascending: true }).limit(1)
   
   if (data && data.length > 0) {
     const { error } = await supabase.from("school_settings").update({ 
